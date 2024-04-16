@@ -1,11 +1,13 @@
-
+// analog button pin 2
 #define BUTTON_PIN 2
 
+// 4 display pins
 int d1 = 5;
 int d2 = 4;
 int d3 = 3;
 int d4 = 2;
 
+// 8 segments
 int sa = 6;
 int sb = 7;
 int sc = 8;
@@ -15,20 +17,14 @@ int sf = 11;
 int sg = 12;
 int sdp = 13;
 
+// global variables for state determination
 unsigned long start_time_millis = 0;
 unsigned long default_time = 45000;
 unsigned long cooldown = 0;
 int state = 0;
-// 0 is idle
-// 1 is startup
-// 2 is running
-
 
 void setup() {
-  // put your setup code here, to run once:
-
-  //Serial.begin(9600);
-
+  // configure output pins
   pinMode(d1, OUTPUT);
   pinMode(d2, OUTPUT);
   pinMode(d3, OUTPUT);
@@ -43,7 +39,7 @@ void setup() {
   pinMode(sg, OUTPUT);
   pinMode(sdp, OUTPUT);
 
-  reset_timer();
+  // analog input pin is input by default
 }
 
 void reset_timer() {
@@ -51,24 +47,29 @@ void reset_timer() {
 }
 
 void loop() {
+  // state machine
   switch (state) {
-    case 0:
+    case 0:         // idle
       runIdle();
       break;
-    case 1:
+    case 1:         // startup
       runStartup();
       break;
-    case 2:
+    case 2:         // main countdown
       runCountdown();
       break;
-    case 3:
+    case 3:         // ending sequence
       runTheEnd();
       break;
   }
 }
 
+
+//
+//                            RUN METHODS
+//
+
 void runCountdown() {
-  
   unsigned long current_time_millis = millis();
   unsigned long delta = start_time_millis - current_time_millis;
 
@@ -86,7 +87,6 @@ void runCountdown() {
   }
 }
 void runIdle() {
-
   if (checkReset()) {
     cooldown = millis() + 1000;
     state = 1;
@@ -94,7 +94,6 @@ void runIdle() {
   delay(10);
 }
 void runStartup() {
-
   if (cooldown < millis()) {
     state = 2;
     reset_timer();
@@ -116,31 +115,21 @@ void runTheEnd() {
     delay(10);
   }
 
-
-
   if (checkReset()) {
     state = 1;
     cooldown = millis()+1000;
   }
-
 }
 
 
 
+
+//
+//                            HELPER
+//
 bool checkReset() {
-  float buttonValue = analogRead(BUTTON_PIN);
-  //Serial.println(buttonValue);
-  // if (buttonValue > BUTTON_PRESSED_THRESHOLD) {
-  //   Serial.println("Button released");
-  //   // Additional code to execute when the button is released
-  // } else if (buttonValue < BUTTON_RELEASED_THRESHOLD) {
-  //   Serial.println("Button pressed");
-  //   // Additional code to execute when the button is pressed
-  // }
-  if (buttonValue == 0) {
-    return true;
-  }
-  return false;
+  // check if the button is pressed
+  return analogRead(BUTTON_PIN) == 0;
 }
 
 
@@ -157,7 +146,7 @@ bool checkReset() {
 //                            DIGIT CONTROLLER
 //
 
-void renderCountdown(unsigned long delta) {
+void renderCountdown(unsigned long delta) { // renders ulong (in ms) as hektoseconds: 45690 => 45.69
 
   for (int i = 1; i < 5; i++) {
     int d = 5-i;
@@ -183,7 +172,7 @@ unsigned long pow10(int n) { // to rid a flop error
   return result;
 }
 
-void setDigit(int dig) {
+void setDigit(int dig) { // digit encoding
   switch (dig) {
     case 0:
       digitalWrite(sa, LOW);
