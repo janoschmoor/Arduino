@@ -121,7 +121,7 @@ void checkReset() {
 
   if (hasLight && lightLevel > 600) {
     hasLight = false;
-    // TOOD: implements Lights out animation in non blocking manner!
+    animationLightsOut();
 
   } else if (!hasLight && lightLevel < 300) {
     hasLight = true;
@@ -146,17 +146,32 @@ void animationLightsOut() {
   digitalWrite(D3, HIGH);
   digitalWrite(D4, HIGH);
 
-  delay(100);
+  unsigned long target = millis() + 100;
+  while (millis() < target) {
+    checkReset();
+    if (state == 1) {return;}
+    delay(10);
+  }
 
   digitalWrite(SA, HIGH);
   digitalWrite(SG, LOW);
 
-  delay(100);
+  target = millis() + 100;
+  while (millis() < target) {
+    checkReset();
+    if (state == 1) {return;}
+    delay(10);
+  }
 
   digitalWrite(SG, HIGH);
   digitalWrite(SD, LOW);
 
-  delay(100);
+  target = millis() + 100;
+  while (millis() < target) {
+    checkReset();
+    if (state == 1) {return;}
+    delay(10);
+  }
 
   digitalWrite(SD, HIGH);
 
