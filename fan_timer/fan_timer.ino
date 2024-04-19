@@ -154,7 +154,7 @@ void animationLightsOut() {
   delay(100);
 
   digitalWrite(SG, HIGH);
-  digitlaWrite(SD, LOW);
+  digitalWrite(SD, LOW);
 
   delay(100);
 
