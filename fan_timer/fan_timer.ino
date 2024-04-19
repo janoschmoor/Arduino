@@ -121,13 +121,46 @@ void checkReset() {
 
   if (hasLight && lightLevel > 600) {
     hasLight = false;
+    // TOOD: implements Lights out animation in non blocking manner!
+
   } else if (!hasLight && lightLevel < 300) {
     hasLight = true;
     cooldown = millis() + 1000;
     state = 1;
   }
 }
+void animationLightsOut() {
 
+  digitalWrite(SB, HIGH);
+  digitalWrite(SC, HIGH);
+  digitalWrite(SE, HIGH);
+  digitalWrite(SF, HIGH);
+  digitalWrite(SDP, HIGH);
+
+  digitalWrite(SA, LOW); //1
+  digitalWrite(SG, HIGH); //2
+  digitalWrite(SD, HIGH); //3
+
+  digitalWrite(D1, HIGH);
+  digitalWrite(D2, HIGH);
+  digitalWrite(D3, HIGH);
+  digitalWrite(D4, HIGH);
+
+  delay(100);
+
+  digitalWrite(SA, HIGH);
+  digitalWrite(SG, LOW);
+
+  delay(100);
+
+  digitalWrite(SG, HIGH);
+  digitlaWrite(SD, LOW);
+
+  delay(100);
+
+  digitalWrite(SD, HIGH);
+
+}
 
 
 
