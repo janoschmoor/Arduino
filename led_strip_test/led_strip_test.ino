@@ -10,7 +10,7 @@ void setup() {
 }
 
 void loop() {
-  FastLED.setBrightness(10);
+  FastLED.setBrightness(100);
   int dir = 1;
 
   while(true) {
@@ -18,9 +18,12 @@ void loop() {
       dir *= -1;
     }
     id += dir;
-    leds[id] = CRGB::Purple;
+    if (dir == 1) {
+      leds[id] = CRGB::Purple;
+    } else {
+      leds[id] = CRGB::Black;
+    }
     FastLED.show();
-    delay(16);
-    leds[id] = CRGB::Black;
+    delay(50);
   }
 }
