@@ -9,6 +9,7 @@ every 2.5 ns
 
 */
 
+CRGB targets[NUM_LEDS];
 float brightness[NUM_LEDS];
 int id = 10;
 int hue = 0;
@@ -35,15 +36,17 @@ void loop() {
     if (hue > 255) {
       hue = 0;
     }
-    target = CHSV(hue, 255, 255);
+    // target = CHSV(hue, 255, 255);
 
     brightness[id] = 1.0;
+    targets[id] = CHSV(hue, 255, 255);
+
     for (int j = 0; j < 2; j++) {
       for (int i = 0; i < NUM_LEDS; i++) {
         if (brightness[i] < 0.005) {
           leds[i] = CRGB::Black;
         } else {
-          leds[i] = blend(target, fadeOut, floor(255 * (1 - brightness[i])));
+          leds[i] = blend(targets[i], fadeOut, floor(255 * (1 - brightness[i])));
         }
         brightness[i] *= 0.99;
       }
