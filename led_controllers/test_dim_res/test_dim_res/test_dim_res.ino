@@ -11,16 +11,17 @@ every 2.5 ns
 
 float brightness[NUM_LEDS];
 int id = 10;
+int hue = 0;
 
 void setup() {
   FastLED.addLeds<NEOPIXEL, 6>(leds, NUM_LEDS);
 }
 
 void loop() {
-  FastLED.setBrightness(100);
+  //FastLED.setBrightness(100);
   int dir = 1;
 
-  CRGB target = CRGB::Plum;
+  CRGB target;
   CRGB fadeOut = CRGB::Black;
 
   while(true) {
@@ -30,10 +31,16 @@ void loop() {
       dir *= -1;
     }
 
+    hue++;
+    if (hue > 255) {
+      hue = 0;
+    }
+    target = CHSV(hue, 255, 255);
+
     brightness[id] = 1.0;
-    for (int j = 0; j < 5; j++) {
+    for (int j = 0; j < 2; j++) {
       for (int i = 0; i < NUM_LEDS; i++) {
-        if (brightness[i] < 0.1) {
+        if (brightness[i] < 0.005) {
           leds[i] = CRGB::Black;
         } else {
           leds[i] = blend(target, fadeOut, floor(255 * (1 - brightness[i])));
