@@ -12,7 +12,7 @@ every 2.5 ns
 CRGB targets[NUM_LEDS];
 float brightness[NUM_LEDS];
 int id = 10;
-int hue = 0;
+float hue = 0;
 
 void setup() {
   FastLED.addLeds<NEOPIXEL, 6>(leds, NUM_LEDS);
@@ -32,16 +32,16 @@ void loop() {
       dir *= -1;
     }
 
-    hue++;
+    hue += 0.15;
     if (hue > 255) {
       hue = 0;
     }
     // target = CHSV(hue, 255, 255);
 
     brightness[id] = 1.0;
-    targets[id] = CHSV(hue, 255, 255);
+    targets[id] = CHSV((int) hue, 255, 255);
 
-    for (int j = 0; j < 2; j++) {
+    for (int j = 0; j < 1; j++) {
       for (int i = 0; i < NUM_LEDS; i++) {
         if (brightness[i] < 0.005) {
           leds[i] = CRGB::Black;
@@ -52,7 +52,7 @@ void loop() {
       }
 
       FastLED.show();
-      delay(3);
+      delay(500);
     }
 
 
