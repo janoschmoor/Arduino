@@ -1,19 +1,19 @@
 
 // 4 display pins
-#define D1 11
-#define D2 12
-#define D3 13
-#define D4 7
+#define D1 2
+#define D2 5
+#define D3 6
+#define D4 13
 
 // 8 segments
-#define SA 8
-#define SB 10
-#define SC 5
-#define SD 3
-#define SE 2
-#define SF 9
-#define SG 6
-#define SDP 4
+#define SA 3
+#define SB 7
+#define SC 11
+#define SD 9
+#define SE 8
+#define SF 4
+#define SG 12
+#define SDP 10
 
 // global variables for state determination
 unsigned long start_time_millis = 0;
@@ -38,6 +38,8 @@ void setup() {
   pinMode(SG, OUTPUT);
   pinMode(SDP, OUTPUT);
 
+  Serial.begin(9600);
+
 }
 
 void reset_timer() {
@@ -45,10 +47,14 @@ void reset_timer() {
 }
 
 void loop() {
-  // state machine
+  // unsigned long test = 45000;
+  // renderCountdown(test);
+
+  // return;
 
   checkReset();
 
+  // state machine
   switch (state) {
     case 0:         // idle
       runIdle();
@@ -117,7 +123,9 @@ void runTheEnd() {
 //
 void checkReset() {
 
-  int lightLevel = analogRead(A0);
+  int lightLevel = analogRead(A3);
+
+  Serial.println(lightLevel);
 
   if (hasLight && lightLevel > 600) {
     hasLight = false;
@@ -137,7 +145,7 @@ void animationLightsOut() {
   digitalWrite(SF, HIGH);
   digitalWrite(SDP, HIGH);
 
-  digitalWrite(SA, LOW); //1
+  digitalWrite(SA, HIGH); //1
   digitalWrite(SG, HIGH); //2
   digitalWrite(SD, HIGH); //3
 
@@ -146,34 +154,41 @@ void animationLightsOut() {
   digitalWrite(D3, HIGH);
   digitalWrite(D4, HIGH);
 
-  unsigned long target = millis() + 100;
-  while (millis() < target) {
-    checkReset();
-    if (state == 1) {return;}
-    delay(10);
+  unsigned long target;
+  
+  for (int i = 0; i < 3; i++) {
+    target = millis() + 100;
+    digitalWrite(SA, LOW);
+    while (millis() < target) {
+      checkReset();
+      if (state == 1) {return;}
+      delay(10);
+    }
+
+    digitalWrite(SA, HIGH);
+    digitalWrite(SG, LOW);
+
+    target = millis() + 100;
+    while (millis() < target) {
+      checkReset();
+      if (state == 1) {return;}
+      delay(10);
+    }
+
+    digitalWrite(SG, HIGH);
+    digitalWrite(SD, LOW);
+
+    target = millis() + 100;
+    while (millis() < target) {
+      checkReset();
+      if (state == 1) {return;}
+      delay(10);
+    }
+
+    digitalWrite(SD, HIGH);
   }
 
-  digitalWrite(SA, HIGH);
-  digitalWrite(SG, LOW);
-
-  target = millis() + 100;
-  while (millis() < target) {
-    checkReset();
-    if (state == 1) {return;}
-    delay(10);
-  }
-
-  digitalWrite(SG, HIGH);
-  digitalWrite(SD, LOW);
-
-  target = millis() + 100;
-  while (millis() < target) {
-    checkReset();
-    if (state == 1) {return;}
-    delay(10);
-  }
-
-  digitalWrite(SD, HIGH);
+  state = 0;
 
 }
 
