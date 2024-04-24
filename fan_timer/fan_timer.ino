@@ -129,7 +129,10 @@ void checkReset() {
 
   if (hasLight && lightLevel > 600) {
     hasLight = false;
-    animationLightsOut();
+
+    if (state > 0) {
+      animationLightsOut();
+    }
 
   } else if (!hasLight && lightLevel < 300) {
     hasLight = true;
