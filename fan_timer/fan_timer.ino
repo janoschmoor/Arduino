@@ -68,6 +68,9 @@ void loop() {
     case 3:         // ending sequence
       runTheEnd();
       break;
+    case 4:         // funky text
+      runFunkyText();
+      break;
   }
 }
 
@@ -106,12 +109,23 @@ void runTheEnd() {
   unsigned long delta = cooldown - millis();
 
   if (millis() > cooldown) {
-    state = 0;
+    state = 4;
+    cooldown = millis() + 10000;
   }
   if ((delta / 1000) % 2 == 0) {
     renderCountdown(0);
   } else {
     delay(10);
+  }
+}
+void runFunkyText() {
+
+  if (millis() + 3000 > cooldown) {
+    renderText();
+  }
+
+  if (millis() > cooldown) {
+    state = 0;
   }
 }
 
@@ -131,6 +145,7 @@ void checkReset() {
     hasLight = false;
 
     if (state > 0) {
+
       animationLightsOut();
     }
 
@@ -252,6 +267,59 @@ unsigned long pow10(int n) { // to rid a flop error
     result *= 10;
   }
   return result;
+}
+
+void renderText() {
+  //String test = "POOP";
+  
+  digitalWrite(D1, HIGH);
+  digitalWrite(D2, LOW);
+  digitalWrite(D3, LOW);
+  digitalWrite(D4, LOW);
+
+  digitalWrite(SA, LOW);
+  digitalWrite(SB, LOW);
+  digitalWrite(SC, HIGH);
+  digitalWrite(SD, HIGH);
+  digitalWrite(SE, LOW);
+  digitalWrite(SF, LOW);
+  digitalWrite(SG, LOW);
+
+  delay(5);
+
+  digitalWrite(D1, LOW);
+  digitalWrite(D2, HIGH);
+
+  digitalWrite(SA, LOW);
+  digitalWrite(SB, LOW);
+  digitalWrite(SC, LOW);
+  digitalWrite(SD, LOW);
+  digitalWrite(SE, LOW);
+  digitalWrite(SF, LOW);
+  digitalWrite(SG, HIGH);
+
+  delay(5);
+  
+  digitalWrite(D2, LOW);
+  digitalWrite(D3, HIGH);
+
+  delay(5);
+
+  digitalWrite(D3, LOW);
+  digitalWrite(D4, HIGH);
+
+  digitalWrite(SA, LOW);
+  digitalWrite(SB, LOW);
+  digitalWrite(SC, HIGH);
+  digitalWrite(SD, HIGH);
+  digitalWrite(SE, LOW);
+  digitalWrite(SF, LOW);
+  digitalWrite(SG, LOW);
+
+  delay(5);
+
+  digitalWrite(D4, LOW);
+
 }
 
 void setDigit(int dig) { // digit encoding
