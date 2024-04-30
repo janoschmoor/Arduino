@@ -57,11 +57,11 @@ class Dot {
       float res;
 
       //double sided quad
-      res = (1 + -1*(x*x));
+      //res = (1 + -1*(x*x));
       
       //double sided linear
-      //res = 
-      
+      res = abs(x) <= 1.0 ? 1.0 - abs(x) : 0.0;
+
       return res >= 0.0 ? res : 0.0;
     }
 };
