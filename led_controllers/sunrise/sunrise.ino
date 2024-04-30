@@ -4,14 +4,49 @@
 // of morphing between their own values. 
 // this strip will be mounted under the bed ;)
 
+#include <FastLED.h>
+#define NUM_LEDS 60
+CRGB leds[NUM_LEDS];
 
+class Dot {
+  private:
+    int position;
+    int previousPosition;
+    int velocity;
+    CRGB color;
+
+  public:
+    Dot(int startPos, int startVel, CRGB startColor) {
+      position = startPos;
+      previousPosition = startPos;
+      velocity = startVel;
+      color = startColor;
+    }
+
+    void update() {
+      previousPosition = position;
+      position += velocity;
+    }
+
+    void render() {
+      leds[position] = color;
+      leds[previousPosition] = CRGB::Black;
+    }
+};
+
+Dot dot(0, 1, CRGB::Yellow); // Example dot object
 
 void setup() {
-  // put your setup code here, to run once:
+  FastLED.addLeds<NEOPIXEL, 6>(leds, NUM_LEDS);
 
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
 
+void loop() {
+  dot.update();
+
+  dot.render();
+
+  FastLED.show();
+  delay(100); // Adjust the delay time as needed
 }
