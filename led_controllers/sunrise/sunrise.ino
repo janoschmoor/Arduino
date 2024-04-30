@@ -8,6 +8,8 @@
 #define NUM_LEDS 60
 CRGB leds[NUM_LEDS];
 
+long last_time;
+
 class Dot {
   private:
     float position;
@@ -23,9 +25,9 @@ class Dot {
       color = startColor;
     }
 
-    void update() {
+    void update(float dt) {
       previousPosition = position;
-      position = (position + velocity);
+      position = (position + velocity * dt);
       if (position > NUM_LEDS || position < 0) {
         velocity *= -1;
       }
@@ -33,23 +35,20 @@ class Dot {
 
     void render() {
       
-      int render_dist = 4;
+      float render_dist = 8;
 
-      for (int px = (int) (position - render_dist / 2) + 1; px < (int) (position + render_dist / 2)+1; px++) {
+      for (int px = (int) (position - render_dist) + 1; px < (int) (position + render_dist)+1; px++) {
         
-        if (px < 0 || px >= NUM_LEDS ) {continue;}
+        if (px < -0.001 || px >= NUM_LEDS ) {continue;}
         
         // for each pixel within the renderdistance
 
-        float distance = px - position;
+        float distance = (px - position) / (render_dist / 2.0);
 
         float intensity = easing(distance);
+        intensity = intensity > 0.01 ? intensity : 0.0;
         leds[px] = blend(CRGB::Black, color, (int) (intensity * 255));
       }
-
-      
-      // leds[(int)position] = color;
-      // leds[(int)previousPosition] = CRGB::Black;
     }
 
     //    Helper
@@ -66,22 +65,32 @@ class Dot {
     }
 };
 
-Dot dot(3.5, 0.01, blend(CRGB::Purple, CRGB::Black, 0)); // Example dot object
+Dot dots[] = {
+  Dot(0.0, 5.0, blend(CRGB::Purple, CRGB::Black, 0)),
+  Dot(10.0, 3.0, blend(CRGB::Yellow, CRGB::Black, 0)),
+  Dot(20.0, 2.0, blend(CRGB::Red, CRGB::Black, 0))
+};
+
+//Dot dot(0.0, 5.0, blend(CRGB::Purple, CRGB::Black, 0)); // Example dot object
 
 void setup() {
   FastLED.addLeds<NEOPIXEL, 6>(leds, NUM_LEDS);
-
+  last_time = millis();
 }
 
 
 void loop() {
 
-  dot.update();
+  float delta = ((float) millis() - (float) last_time) / 1000;
+  last_time = millis();
 
-  dot.render();
+  for (int i = 0; i < sizeof(dots) / sizeof(dots[0]); i++) {
+    dots[i].update(delta);
+    dots[i].render();
+  }
 
   FastLED.show();
-  delay(5); // Adjust the delay time as needed
+  delay(3); // Adjust the delay time as needed
 }
 
 
