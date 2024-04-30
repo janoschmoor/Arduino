@@ -10,13 +10,13 @@ CRGB leds[NUM_LEDS];
 
 class Dot {
   private:
-    int position;
-    int previousPosition;
-    int velocity;
+    float position;
+    float previousPosition;
+    float velocity;
     CRGB color;
 
   public:
-    Dot(int startPos, int startVel, CRGB startColor) {
+    Dot(float startPos, float startVel, CRGB startColor) {
       position = startPos;
       previousPosition = startPos;
       velocity = startVel;
@@ -25,16 +25,48 @@ class Dot {
 
     void update() {
       previousPosition = position;
-      position += velocity;
+      position = (position + velocity);
+      if (position > NUM_LEDS || position < 0) {
+        velocity *= -1;
+      }
     }
 
     void render() {
-      leds[position] = color;
-      leds[previousPosition] = CRGB::Black;
+      
+      int render_dist = 4;
+
+      for (int px = (int) (position - render_dist / 2) + 1; px < (int) (position + render_dist / 2)+1; px++) {
+        
+        if (px < 0 || px >= NUM_LEDS ) {continue;}
+        
+        // for each pixel within the renderdistance
+
+        float distance = px - position;
+
+        float intensity = easing(distance);
+        leds[px] = blend(CRGB::Black, color, (int) (intensity * 255));
+      }
+
+      
+      // leds[(int)position] = color;
+      // leds[(int)previousPosition] = CRGB::Black;
+    }
+
+    //    Helper
+    float easing(float x) {
+      float res;
+
+      //double sided quad
+      res = (1 + -1*(x*x));
+      
+      //double sided linear
+      //res = 
+      
+      return res >= 0.0 ? res : 0.0;
     }
 };
 
-Dot dot(0, 1, CRGB::Yellow); // Example dot object
+Dot dot(3.5, 0.01, blend(CRGB::Purple, CRGB::Black, 0)); // Example dot object
 
 void setup() {
   FastLED.addLeds<NEOPIXEL, 6>(leds, NUM_LEDS);
@@ -43,10 +75,18 @@ void setup() {
 
 
 void loop() {
+
   dot.update();
 
   dot.render();
 
   FastLED.show();
-  delay(100); // Adjust the delay time as needed
+  delay(5); // Adjust the delay time as needed
 }
+
+
+
+
+
+
+
