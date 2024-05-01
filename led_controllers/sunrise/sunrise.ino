@@ -7,8 +7,11 @@
 #include <FastLED.h>
 #define NUM_LEDS 60
 CRGB leds[NUM_LEDS];
+CRGB targets[NUM_LEDS];
+float brightness[NUM_LEDS];
 
 long last_time;
+float fade = 0.98;
 
 class Dot {
   private:
@@ -35,7 +38,7 @@ class Dot {
 
     void render() {
       
-      float render_dist = 8;
+      float render_dist = 2;
 
       for (int px = (int) (position - render_dist) + 1; px < (int) (position + render_dist)+1; px++) {
         
@@ -47,7 +50,11 @@ class Dot {
 
         float intensity = easing(distance);
         intensity = intensity > 0.01 ? intensity : 0.0;
+
         leds[px] = blend(CRGB::Black, color, (int) (intensity * 255));
+
+        // targets[px] = blend(targets[px], color, (int) (intensity * 255));
+        // brightness[px] = 1.0f;
       }
     }
 
@@ -66,9 +73,9 @@ class Dot {
 };
 
 Dot dots[] = {
-  Dot(0.0, 5.0, blend(CRGB::Purple, CRGB::Black, 0)),
-  Dot(10.0, 3.0, blend(CRGB::Yellow, CRGB::Black, 0)),
-  Dot(20.0, 2.0, blend(CRGB::Red, CRGB::Black, 0))
+  Dot(0.0, 0.5, blend(CRGB::Purple, CRGB::Black, 0)),
+  // Dot(10.0, 3.0, blend(CRGB::Yellow, CRGB::Black, 0)),
+  // Dot(20.0, 2.0, blend(CRGB::Red, CRGB::Black, 0))
 };
 
 //Dot dot(0.0, 5.0, blend(CRGB::Purple, CRGB::Black, 0)); // Example dot object
@@ -88,6 +95,11 @@ void loop() {
     dots[i].update(delta);
     dots[i].render();
   }
+
+  // for (int i = 0; i < NUM_LEDS; i++) {
+  //   leds[i] = blend(CRGB::Black, targets[i], (int) (brightness[i] * 255));
+  //   brightness[i] *= fade;
+  // }
 
   FastLED.show();
   delay(3); // Adjust the delay time as needed
