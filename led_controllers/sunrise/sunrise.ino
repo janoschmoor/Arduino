@@ -76,8 +76,8 @@ class Dot {
 
 Dot dots[] = {
   Dot(0.0, 1.5, blend(CRGB::Purple, CRGB::Black, 0)),
-  Dot(10.0, 1.0, blend(CRGB::Yellow, CRGB::Black, 0)),
-  Dot(20.0, 2.0, blend(CRGB::Red, CRGB::Black, 0))
+  // Dot(10.0, 1.0, blend(CRGB::Yellow, CRGB::Black, 0)),
+  // Dot(20.0, 2.0, blend(CRGB::Red, CRGB::Black, 0))
 };
 
 //Dot dot(0.0, 5.0, blend(CRGB::Purple, CRGB::Black, 0)); // Example dot object
