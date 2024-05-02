@@ -11,7 +11,7 @@ CRGB targets[NUM_LEDS];
 float brightness[NUM_LEDS];
 
 long last_time;
-float fade = 0.0;
+float fade = 0.2; // 0.1 fades absolute 10% per second
 
 class Dot {
   private:
@@ -37,7 +37,6 @@ class Dot {
     void render() {
 
       int px = ((int) position);
-      //int px = ((int) position + 1.0);
 
       float distance = (position - (float) px);
       if (velocity > 0) {
@@ -45,10 +44,10 @@ class Dot {
       }
       float intensity = easing(distance);
 
-      brightness[px] = intensity;
+      brightness[px] = max(intensity, brightness[px]);
       targets[px] = CRGB::Blue;
 
-      Serial.println(distance);
+      // Serial.println(distance);
       
       // float render_dist = 2;
 
@@ -84,7 +83,9 @@ class Dot {
 
       // one sided
       if (x < 0) return 0.0;
-      res = 1.0 - x;
+      // res = 1.0 - x*x; // quad fast light up
+      res = (x-1)*(x-1); // quad slow light up
+      // res = (x-1)*(x-1)*(x-1); // cube slow light up
       res = constrain(res, 0.0, 1.0);
 
       return res >= 0.0 ? res : 0.0;
@@ -111,7 +112,7 @@ Dot dots[] = {
 
 
 void setup() {
-  Serial.begin(9600);
+  // Serial.begin(9600);
   FastLED.addLeds<NEOPIXEL, 6>(leds, NUM_LEDS);
   last_time = millis();
   // FastLED.setBrightness(100);
@@ -130,7 +131,7 @@ void loop() {
 
   for (int i = 0; i < NUM_LEDS; i++) {
     leds[i] = blend(CRGB::Black, targets[i], (int) (brightness[i] * 255));
-    brightness[i] *= fade;
+    brightness[i] = max(brightness[i] - fade * delta, 0.0);
   }
 
   FastLED.show();
