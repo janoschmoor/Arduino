@@ -5,7 +5,7 @@
 // this strip will be mounted under the bed ;)
 
 #include <FastLED.h>
-#define NUM_LEDS 15 // 60
+#define NUM_LEDS 60 // 60
 CRGB leds[NUM_LEDS];
 CRGB targets[NUM_LEDS];
 float brightness[NUM_LEDS];
@@ -34,7 +34,7 @@ class Dot {
       }
     }
 
-    void render() {
+    void render(float dt) {
 
       int px = ((int) position);
 
@@ -45,7 +45,10 @@ class Dot {
       float intensity = easing(distance);
 
       brightness[px] = max(intensity, brightness[px]);
-      targets[px] = CRGB::Blue;
+
+      float blendamt = 0.02;
+
+      targets[px] = blend(targets[px], color, blendamt*255);
 
       // Serial.println(distance);
       
@@ -93,9 +96,9 @@ class Dot {
 };
 
 Dot dots[] = {
-  Dot(NUM_LEDS / 2, 1.0, blend(CRGB::Purple, CRGB::Black, 0)),
-  // Dot(10.0, 1.0, blend(CRGB::Yellow, CRGB::Black, 0)),
-  // Dot(20.0, 2.0, blend(CRGB::Red, CRGB::Black, 0))
+  Dot(NUM_LEDS / 2, -1.0, CHSV(60, 255, 255)),
+  Dot(NUM_LEDS / 2, 1.8, CHSV(280, 255, 255)),
+  Dot(NUM_LEDS / 2, 1.3, CHSV(0, 255, 255))
 };
 
 //Dot dot(0.0, 5.0, blend(CRGB::Purple, CRGB::Black, 0)); // Example dot object
@@ -126,7 +129,7 @@ void loop() {
 
   for (int i = 0; i < sizeof(dots) / sizeof(dots[0]); i++) {
     dots[i].update(delta);
-    dots[i].render();
+    dots[i].render(delta);
   }
 
   for (int i = 0; i < NUM_LEDS; i++) {
