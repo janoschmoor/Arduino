@@ -5,59 +5,71 @@
 // this strip will be mounted under the bed ;)
 
 #include <FastLED.h>
-#define NUM_LEDS 60
+#define NUM_LEDS 15 // 60
 CRGB leds[NUM_LEDS];
 CRGB targets[NUM_LEDS];
 float brightness[NUM_LEDS];
 
 long last_time;
-float fade = 0.998;
+float fade = 0.0;
 
 class Dot {
   private:
     float position;
-    float previousPosition;
     float velocity;
     CRGB color;
 
   public:
     Dot(float startPos, float startVel, CRGB startColor) {
       position = startPos;
-      previousPosition = startPos;
       velocity = startVel;
       color = startColor;
     }
 
     void update(float dt) {
-      previousPosition = position;
       position = (position + velocity * dt);
-      if (position > NUM_LEDS || position < 0) {
+      if (position > (float) NUM_LEDS - 0.5 || position < 0.5) {
         velocity *= -1;
+        position = (position + 2.0 * velocity * dt);
       }
     }
 
     void render() {
-      
-      float render_dist = 2;
 
-      for (int px = (int) (position - render_dist) + 1; px < (int) (position + render_dist)+1; px++) {
-        
-        if (px < -0.001 || px >= NUM_LEDS ) {continue;}
-        
-        // for each pixel within the renderdistance
+      int px = ((int) position);
+      //int px = ((int) position + 1.0);
 
-        float distance = (px - position) / (render_dist / 2.0);
-
-        if ((distance < 0.0 && velocity > 0.0) || (distance > 0.0 && velocity < 0.0)) {continue;}
-
-        float intensity = easing(distance);
-        intensity = intensity > 0.01 ? intensity : 0.0;
-
-        //leds[px] = blend(CRGB::Black, color, (int) (intensity * 255));
-
-        targets[px] = blend(targets[px], color,3);
-        brightness[px] = ((brightness[px])>(intensity)?(brightness[px]):(intensity));
+      float distance = (position - (float) px);
+      if (velocity > 0) {
+        distance = 1-distance;
       }
+      float intensity = easing(distance);
+
+      brightness[px] = intensity;
+      targets[px] = CRGB::Blue;
+
+      Serial.println(distance);
+      
+      // float render_dist = 2;
+
+      // for (int px = (int) (position - render_dist) + 1; px < (int) (position + render_dist)+1; px++) {
+        
+      //   if (px < -0.001 || px >= NUM_LEDS ) {continue;}
+        
+      //   // for each pixel within the renderdistance
+
+      //   float distance = (px - position) / (render_dist / 2.0);
+
+      //   if ((distance < 0.0 && velocity > 0.0) || (distance > 0.0 && velocity < 0.0)) {continue;}
+
+      //   float intensity = easing(distance);
+      //   intensity = intensity > 0.01 ? intensity : 0.0;
+
+      //   //leds[px] = blend(CRGB::Black, color, (int) (intensity * 255));
+
+      //   targets[px] = blend(targets[px], color,3);
+      //   brightness[px] = ((brightness[px])>(intensity)?(brightness[px]):(intensity));
+      // }
     }
 
     //    Helper
@@ -68,23 +80,41 @@ class Dot {
       //res = (1 + -1*(x*x));
       
       //double sided linear
-      res = abs(x) <= 1.0 ? 1.0 - abs(x) : 0.0;
+      //res = abs(x) <= 1.0 ? 1.0 - abs(x) : 0.0;
+
+      // one sided
+      if (x < 0) return 0.0;
+      res = 1.0 - x;
+      res = constrain(res, 0.0, 1.0);
 
       return res >= 0.0 ? res : 0.0;
     }
 };
 
 Dot dots[] = {
-  Dot(0.0, 1.5, blend(CRGB::Purple, CRGB::Black, 0)),
+  Dot(NUM_LEDS / 2, 1.0, blend(CRGB::Purple, CRGB::Black, 0)),
   // Dot(10.0, 1.0, blend(CRGB::Yellow, CRGB::Black, 0)),
   // Dot(20.0, 2.0, blend(CRGB::Red, CRGB::Black, 0))
 };
 
 //Dot dot(0.0, 5.0, blend(CRGB::Purple, CRGB::Black, 0)); // Example dot object
 
+
+
+
+
+
+
+
+
+
+
+
 void setup() {
+  Serial.begin(9600);
   FastLED.addLeds<NEOPIXEL, 6>(leds, NUM_LEDS);
   last_time = millis();
+  // FastLED.setBrightness(100);
 }
 
 
