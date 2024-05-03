@@ -56,10 +56,15 @@ class Dot {
     }
 };
 
+// Dot dots[] = {
+//   Dot(NUM_LEDS / 2, -1.0, CHSV(60, 255, 255)),
+//   Dot(NUM_LEDS / 2, 1.8, CHSV(280, 255, 255)),
+//   Dot(NUM_LEDS / 2, 1.3, CHSV(0, 255, 255))
+// };
 Dot dots[] = {
-  Dot(NUM_LEDS / 2, -1.0, CHSV(60, 255, 255)),
-  Dot(NUM_LEDS / 2, 1.8, CHSV(280, 255, 255)),
-  Dot(NUM_LEDS / 2, 1.3, CHSV(0, 255, 255))
+  Dot(NUM_LEDS / 2, -3.0, CHSV(60, 255, 255)),
+  Dot(NUM_LEDS / 2, 4.8, CHSV(280, 255, 255)),
+  Dot(NUM_LEDS / 2, 3.3, CHSV(0, 255, 255))
 };
 
 
