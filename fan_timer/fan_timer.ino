@@ -38,7 +38,7 @@ void setup() {
   pinMode(SG, OUTPUT);
   pinMode(SDP, OUTPUT);
 
-  Serial.begin(9600);
+  // Serial.begin(9600);
 
 }
 
@@ -69,6 +69,9 @@ void loop() {
       runTheEnd();
       break;
     case 4:         // funky text
+      runFunkyText();
+      break;
+    case 5:         // funky text
       runFunkyText();
       break;
   }
@@ -109,7 +112,7 @@ void runTheEnd() {
   unsigned long delta = cooldown - millis();
 
   if (millis() > cooldown) {
-    state = 4;
+    state = 5; // here was 4 to render funky text
     cooldown = millis() + 10000;
   }
   if ((delta / 1000) % 2 == 0) {
@@ -129,6 +132,15 @@ void runFunkyText() {
   }
 }
 
+void runCountUp() {
+
+  unsigned long current_time_millis = millis();
+  unsigned long delta = start_time_millis - current_time_millis;
+
+  renderCountdown(-delta);
+  
+}
+
 
 
 
@@ -139,7 +151,7 @@ void checkReset() {
 
   int lightLevel = analogRead(A3);
 
-  Serial.println(lightLevel);
+  // Serial.println(lightLevel);
 
   if (hasLight && lightLevel > 600) {
     hasLight = false;
