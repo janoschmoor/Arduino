@@ -72,7 +72,7 @@ void loop() {
       runFunkyText();
       break;
     case 5:         // funky text
-      runFunkyText();
+      runCountUp();
       break;
   }
 }
@@ -137,7 +137,7 @@ void runCountUp() {
   unsigned long current_time_millis = millis();
   unsigned long delta = start_time_millis - current_time_millis;
 
-  renderCountdown(-delta);
+  renderCountdownMinutes(-delta);
   
 }
 
@@ -234,6 +234,35 @@ void animationLightsOut() {
 //
 //                            DIGIT CONTROLLER
 //
+
+void renderCountdownMinutes(unsigned long delta) {
+  unsigned long minutes = delta / 60000;
+  unsigned long seconds = (delta % 60000) / 1000;
+
+  // Render minutes
+  int digit1 = minutes / 10;
+  int digit2 = minutes % 10;
+  setDigit(digit1);
+  digitalWrite(D1, HIGH);
+  delay(3);
+  digitalWrite(D1, LOW);
+  setDigit(digit2);
+  digitalWrite(D2, HIGH);
+  delay(3);
+  digitalWrite(D2, LOW);
+
+  // Render seconds
+  digit1 = seconds / 10;
+  digit2 = seconds % 10;
+  setDigit(digit1);
+  digitalWrite(D3, HIGH);
+  delay(3);
+  digitalWrite(D3, LOW);
+  setDigit(digit2);
+  digitalWrite(D4, HIGH);
+  delay(3);
+  digitalWrite(D4, LOW);
+}
 
 void renderCountdown(unsigned long delta) { // renders ulong (in ms) as hektoseconds: 45690 => 45.69
 
