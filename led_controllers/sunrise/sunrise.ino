@@ -8,7 +8,7 @@ long last_time;
 float fade = 0.2; // 0.1 fades absolute 10% per second
 
 class Dot {
-  private:
+  public:
     float position;
     float velocity;
     CRGB color;
@@ -28,7 +28,7 @@ class Dot {
       }
     }
 
-    void render(float dt) {
+    void render(float dt, CRGB target) {
       int px = ((int) position);
 
       // brightness
@@ -40,8 +40,9 @@ class Dot {
       brightness[px] = max(intensity, brightness[px]);
 
       // blending
-      float blendamt = 0.02;
-      targets[px] = blend(targets[px], color, blendamt*255);
+      // float blendamt = 0.02;
+      // targets[px] = blend(targets[px], color, blendamt*255);
+      targets[px] = target;
     }
 
     //    Helper
@@ -62,9 +63,9 @@ class Dot {
 //   Dot(NUM_LEDS / 2, 1.3, CHSV(0, 255, 255))
 // };
 Dot dots[] = {
-  Dot(NUM_LEDS / 2, -3.0, CHSV(60, 255, 255)),
-  Dot(NUM_LEDS / 2, 4.8, CHSV(280, 255, 255)),
-  Dot(NUM_LEDS / 2, 3.3, CHSV(0, 255, 255))
+  Dot(1, 0.9, CHSV(0, 255, 255)),
+  Dot(NUM_LEDS / 2, 4.8, CHSV(213, 255, 255)),
+  Dot(NUM_LEDS / 2, 3.3, CHSV(42, 255, 255))
 };
 
 
@@ -74,7 +75,7 @@ Dot dots[] = {
 
 
 
-//
+ //
 //      < RUN THE SKETCH >
 //
 
@@ -92,7 +93,16 @@ void loop() {
   // simulate 
   for (int i = 0; i < sizeof(dots) / sizeof(dots[0]); i++) {
     dots[i].update(delta);
-    dots[i].render(delta);
+
+    CRGB target = dots[i].color;
+    for (int j = 0; j < sizeof(dots) / sizeof(dots[0]); j++) {
+      if (i != j) {
+        float distance = abs(dots[i].position - dots[j].position);
+        float blendAmt = pow(2, -distance) / 2.0;
+        target = blend(target, dots[j].color, blendAmt * 255);
+      }
+    }
+    dots[i].render(delta, target);
   }
 
   // apply lighting to leds
