@@ -42,7 +42,9 @@ class Dot {
       // blending
       // float blendamt = 0.02;
       // targets[px] = blend(targets[px], color, blendamt*255);
-      targets[px] = target;
+      // targets[px] = target;
+      targets[px] = blend(targets[px], target, 40);
+
     }
 
     //    Helper
@@ -63,8 +65,8 @@ class Dot {
 //   Dot(NUM_LEDS / 2, 1.3, CHSV(0, 255, 255))
 // };
 Dot dots[] = {
-  Dot(1, 0.9, CHSV(0, 255, 255)),
-  Dot(NUM_LEDS / 2, 4.8, CHSV(213, 255, 255)),
+  Dot(5.0, 2.5, CHSV(0, 255, 255)),
+  Dot(15.0, -2.0, CHSV(213, 255, 255)),
   Dot(NUM_LEDS / 2, 3.3, CHSV(42, 255, 255))
 };
 
@@ -98,7 +100,7 @@ void loop() {
     for (int j = 0; j < sizeof(dots) / sizeof(dots[0]); j++) {
       if (i != j) {
         float distance = abs(dots[i].position - dots[j].position);
-        float blendAmt = pow(2, -distance) / 2.0;
+        float blendAmt = pow(1.25, -distance) / 2.0; // adjust first float for steeper or shallower blending
         target = blend(target, dots[j].color, blendAmt * 255);
       }
     }
