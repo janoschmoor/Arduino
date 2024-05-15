@@ -114,7 +114,8 @@ void runTheEnd() {
     cooldown = millis() + 10000;
   }
   if ((delta / 1000) % 2 == 0) {
-    renderCountdown(0);
+    // renderCountdown(0);
+    renderText();
   } else {
     delay(10);
   }
@@ -306,58 +307,58 @@ unsigned long pow10(int n) { // to rid a flop error
   return result;
 }
 
-// void renderText() {
-//   //String test = "POOP";
+void renderText() {
+  //String test = "POOP";
   
-//   digitalWrite(D1, HIGH);
-//   digitalWrite(D2, LOW);
-//   digitalWrite(D3, LOW);
-//   digitalWrite(D4, LOW);
+  digitalWrite(D1, HIGH);
+  digitalWrite(D2, LOW);
+  digitalWrite(D3, LOW);
+  digitalWrite(D4, LOW);
 
-//   digitalWrite(SA, LOW);
-//   digitalWrite(SB, LOW);
-//   digitalWrite(SC, HIGH);
-//   digitalWrite(SD, HIGH);
-//   digitalWrite(SE, LOW);
-//   digitalWrite(SF, LOW);
-//   digitalWrite(SG, LOW);
+  digitalWrite(SA, LOW);
+  digitalWrite(SB, LOW);
+  digitalWrite(SC, HIGH);
+  digitalWrite(SD, HIGH);
+  digitalWrite(SE, LOW);
+  digitalWrite(SF, LOW);
+  digitalWrite(SG, LOW);
 
-//   delay(5);
+  delay(5);
 
-//   digitalWrite(D1, LOW);
-//   digitalWrite(D2, HIGH);
+  digitalWrite(D1, LOW);
+  digitalWrite(D2, HIGH);
 
-//   digitalWrite(SA, LOW);
-//   digitalWrite(SB, LOW);
-//   digitalWrite(SC, LOW);
-//   digitalWrite(SD, LOW);
-//   digitalWrite(SE, LOW);
-//   digitalWrite(SF, LOW);
-//   digitalWrite(SG, HIGH);
+  digitalWrite(SA, LOW);
+  digitalWrite(SB, LOW);
+  digitalWrite(SC, LOW);
+  digitalWrite(SD, LOW);
+  digitalWrite(SE, LOW);
+  digitalWrite(SF, LOW);
+  digitalWrite(SG, HIGH);
 
-//   delay(5);
+  delay(5);
   
-//   digitalWrite(D2, LOW);
-//   digitalWrite(D3, HIGH);
+  digitalWrite(D2, LOW);
+  digitalWrite(D3, HIGH);
 
-//   delay(5);
+  delay(5);
 
-//   digitalWrite(D3, LOW);
-//   digitalWrite(D4, HIGH);
+  digitalWrite(D3, LOW);
+  digitalWrite(D4, HIGH);
 
-//   digitalWrite(SA, LOW);
-//   digitalWrite(SB, LOW);
-//   digitalWrite(SC, HIGH);
-//   digitalWrite(SD, HIGH);
-//   digitalWrite(SE, LOW);
-//   digitalWrite(SF, LOW);
-//   digitalWrite(SG, LOW);
+  digitalWrite(SA, LOW);
+  digitalWrite(SB, LOW);
+  digitalWrite(SC, HIGH);
+  digitalWrite(SD, HIGH);
+  digitalWrite(SE, LOW);
+  digitalWrite(SF, LOW);
+  digitalWrite(SG, LOW);
 
-//   delay(5);
+  delay(5);
 
-//   digitalWrite(D4, LOW);
+  digitalWrite(D4, LOW);
 
-// }
+}
 
 void setDigit(int dig) { // digit encoding
   switch (dig) {
