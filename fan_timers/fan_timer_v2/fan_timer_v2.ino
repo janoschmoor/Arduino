@@ -464,3 +464,178 @@ void setDigit(int dig) { // digit encoding
     
   }
 }
+void renderLetter(char c) {
+  switch(c) {
+    case 'a':
+      digitalWrite(SA, LOW);
+      digitalWrite(SB, LOW);
+      digitalWrite(SC, LOW);
+      digitalWrite(SD, HIGH);
+      digitalWrite(SE, LOW);
+      digitalWrite(SF, LOW);
+      digitalWrite(SG, LOW);
+      break;
+    case 'b':
+      digitalWrite(SA, HIGH);
+      digitalWrite(SB, HIGH);
+      digitalWrite(SC, LOW);
+      digitalWrite(SD, LOW);
+      digitalWrite(SE, LOW);
+      digitalWrite(SF, LOW);
+      digitalWrite(SG, LOW);
+      break;
+    case 'c':
+      digitalWrite(SA, HIGH);
+      digitalWrite(SB, HIGH);
+      digitalWrite(SC, HIGH);
+      digitalWrite(SD, LOW);
+      digitalWrite(SE, LOW);
+      digitalWrite(SF, HIGH);
+      digitalWrite(SG, LOW);
+      break;
+    case 'd':
+      digitalWrite(SA, HIGH);
+      digitalWrite(SB, LOW);
+      digitalWrite(SC, LOW);
+      digitalWrite(SD, LOW);
+      digitalWrite(SE, LOW);
+      digitalWrite(SF, HIGH);
+      digitalWrite(SG, LOW);
+      break;
+    case 'e':
+      digitalWrite(SA, LOW);
+      digitalWrite(SB, HIGH);
+      digitalWrite(SC, HIGH);
+      digitalWrite(SD, LOW);
+      digitalWrite(SE, LOW);
+      digitalWrite(SF, LOW);
+      digitalWrite(SG, LOW);
+      break;
+    case 'f':
+      digitalWrite(SA, LOW);
+      digitalWrite(SB, HIGH);
+      digitalWrite(SC, HIGH);
+      digitalWrite(SD, HIGH);
+      digitalWrite(SE, LOW);
+      digitalWrite(SF, LOW);
+      digitalWrite(SG, LOW);
+      break;
+    case 'g':
+      digitalWrite(SA, LOW);
+      digitalWrite(SB, HIGH);
+      digitalWrite(SC, LOW);
+      digitalWrite(SD, LOW);
+      digitalWrite(SE, LOW);
+      digitalWrite(SF, LOW);
+      digitalWrite(SG, HIGH);
+      break;
+    case 'h':
+      digitalWrite(SA, HIGH);
+      digitalWrite(SB, HIGH);
+      digitalWrite(SC, LOW);
+      digitalWrite(SD, HIGH);
+      digitalWrite(SE, LOW);
+      digitalWrite(SF, LOW);
+      digitalWrite(SG, LOW);
+      break;
+    case 'i':
+      digitalWrite(SA, HIGH);
+      digitalWrite(SB, HIGH);
+      digitalWrite(SC, LOW);
+      digitalWrite(SD, HIGH);
+      digitalWrite(SE, HIGH);
+      digitalWrite(SF, HIGH);
+      digitalWrite(SG, HIGH);
+      break;
+    case 'l':
+      digitalWrite(SA, HIGH);
+      digitalWrite(SB, HIGH);
+      digitalWrite(SC, HIGH);
+      digitalWrite(SD, LOW);
+      digitalWrite(SE, LOW);
+      digitalWrite(SF, LOW);
+      digitalWrite(SG, HIGH);
+      break;
+    case 'n':
+      digitalWrite(SA, HIGH);
+      digitalWrite(SB, HIGH);
+      digitalWrite(SC, LOW);
+      digitalWrite(SD, HIGH);
+      digitalWrite(SE, LOW);
+      digitalWrite(SF, HIGH);
+      digitalWrite(SG, LOW);
+      break;
+    case 'o':
+      digitalWrite(SA, HIGH);
+      digitalWrite(SB, HIGH);
+      digitalWrite(SC, LOW);
+      digitalWrite(SD, LOW);
+      digitalWrite(SE, LOW);
+      digitalWrite(SF, HIGH);
+      digitalWrite(SG, LOW);
+      break;
+    case 'p':
+      digitalWrite(SA, LOW);
+      digitalWrite(SB, LOW);
+      digitalWrite(SC, HIGH);
+      digitalWrite(SD, HIGH);
+      digitalWrite(SE, LOW);
+      digitalWrite(SF, LOW);
+      digitalWrite(SG, LOW);
+      break;
+    case 'r':
+      digitalWrite(SA, HIGH);
+      digitalWrite(SB, HIGH);
+      digitalWrite(SC, HIGH);
+      digitalWrite(SD, HIGH);
+      digitalWrite(SE, LOW);
+      digitalWrite(SF, HIGH);
+      digitalWrite(SG, LOW);
+      break;
+    case 's':
+      digitalWrite(SA, LOW);
+      digitalWrite(SB, HIGH);
+      digitalWrite(SC, LOW);
+      digitalWrite(SD, LOW);
+      digitalWrite(SE, HIGH);
+      digitalWrite(SF, LOW);
+      digitalWrite(SG, LOW);
+      break;
+    case 't':
+      digitalWrite(SA, HIGH);
+      digitalWrite(SB, HIGH);
+      digitalWrite(SC, HIGH);
+      digitalWrite(SD, LOW);
+      digitalWrite(SE, LOW);
+      digitalWrite(SF, LOW);
+      digitalWrite(SG, LOW);
+      break;
+    case 'u':
+      digitalWrite(SA, HIGH);
+      digitalWrite(SB, HIGH);
+      digitalWrite(SC, LOW);
+      digitalWrite(SD, LOW);
+      digitalWrite(SE, LOW);
+      digitalWrite(SF, HIGH);
+      digitalWrite(SG, HIGH);
+      break;
+    case 'y':
+      digitalWrite(SA, HIGH);
+      digitalWrite(SB, LOW);
+      digitalWrite(SC, LOW);
+      digitalWrite(SD, LOW);
+      digitalWrite(SE, HIGH);
+      digitalWrite(SF, LOW);
+      digitalWrite(SG, LOW);
+      break;
+    default:
+      digitalWrite(SA, HIGH);
+      digitalWrite(SB, HIGH);
+      digitalWrite(SC, HIGH);
+      digitalWrite(SD, HIGH);
+      digitalWrite(SE, HIGH);
+      digitalWrite(SF, HIGH);
+      digitalWrite(SG, HIGH);
+      break;
+  }
+}
