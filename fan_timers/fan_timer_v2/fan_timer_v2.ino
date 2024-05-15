@@ -25,6 +25,77 @@ unsigned long cooldown = 0;
 int state = 0;
 bool hasLight = false;
 
+// messages
+const char* messages[] = {
+  "i   ", "see ", "you ",
+  "init", "poop",
+  "poop", "poop", "poop",
+  "god ", "sees", "you ",
+  "plop", "plop", "plop",
+  "load", "drop", "done",
+  "ohh ", "nooo", "poop",
+  "pee ", "and ", "go  ",
+  "free", "up  ", "soon",
+  "nice", "dude",
+  "haha", "did ", "it  ",
+  "hold", "nose", "now ",
+  "not ", "done", "yet ",
+  "go  ", "fast", "bro ",
+  "nope", "not ", "yet ",
+  "ohoh", "thts", "bad ",
+  "dont", "use ", "so  ", "long",
+  "stop", "it  ", "soon",
+  "gg  ",
+  "bye ", "bye ",
+  "bust", "it  ", "out ",
+  "i   ", "hear", "your", "fart",
+  "call ", "117 ", "pls ",
+  "nice", "butt",
+  "snif", "snif", "yaay",
+  "rush", "hour", "yay ",
+  "nose", "clip", "on  ",
+  "stay", "safe", "bro ",
+  "u   ", "stnk", "dude",
+  "u ok", "in  ", "here",
+  "wow ", "its ", "so  ", "long", "pal ",
+};
+const int messageIndex[] = {
+  0,3,
+  3,2,
+  5,3,
+  8,3,
+  11,3,
+  14,3,
+  17,3,
+  20,3,
+  23,3,
+  26,2,
+  28,3,
+  31,3,
+  34,3,
+  37,3,
+  40,3,
+  43,3,
+  46,4,
+  50,3,
+  53,1,
+  54,2,
+  56,3,
+  59,4,
+  63,3,
+  66,2,
+  68,3,
+  71,3,
+  74,3,
+  77,3,
+  80,3,
+  83,3,
+  86,5,
+
+}
+
+int numSequences = sizeof(sequences) / sizeof(sequences[0]);
+
 void setup() {
   // configure output pins
   pinMode(D1, OUTPUT);
