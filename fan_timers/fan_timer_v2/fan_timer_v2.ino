@@ -92,7 +92,7 @@ const int messageIndex[] = {
   80,3,
   83,3,
   86,5,
-}
+};
 
 int numMessages = sizeof(messageIndex) / sizeof(messageIndex[0]) / 2;
 
@@ -158,7 +158,7 @@ void runCountdown() {
 
   if (current_time_millis >= start_time_millis) {
     state = 3;
-    cooldown = millis() + 1000;
+    cooldown = millis() + 1500;
     delta = 0;
     chooseMessage();
   }
@@ -194,15 +194,15 @@ void runStartup() {
 // }
 
 void runTheEnd() {
-  
+
   if (millis() > cooldown) {
     // advance to next message
-    if (!(++selectedMessageIndex[0] < numMessages)) {
+    if (!(++selectedMessageIndex[0] < selectedMessageIndex[1])) {
       state = 5;
     } else {
-      cooldown = millis() + 1000;
+      cooldown = millis() + 1500;
     }
-  } else {
+  } else if (millis() + 500 < cooldown) {
     renderWord(messages[selectedMessageIndex[0]]);
   }
 }
@@ -234,8 +234,8 @@ void runCountup() {
 //
 void chooseMessage() {
   int index = random(0, numMessages) * 2;
-  selectedMessageIndex[0] = sequences[index][0];
-  selectedMessageIndex[1] = selectedMessageIndex[0] + sequences[index][1];
+  selectedMessageIndex[0] = messageIndex[index];
+  selectedMessageIndex[1] = selectedMessageIndex[0] + messageIndex[index+1];
 }
 void checkReset() {
 
@@ -658,7 +658,7 @@ void renderLetter(char c) {
       break;
     case 'i':
       digitalWrite(SA, HIGH);
-      digitalWrite(SB, HIGH);
+      digitalWrite(SB, LOW);
       digitalWrite(SC, LOW);
       digitalWrite(SD, HIGH);
       digitalWrite(SE, HIGH);
