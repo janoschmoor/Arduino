@@ -24,6 +24,7 @@ unsigned long default_time = 45000;
 unsigned long cooldown = 0;
 int state = 0;
 bool hasLight = false;
+int selectedMessageIndex[] = {0,0};
 
 // messages
 const char* messages[] = {
@@ -91,10 +92,9 @@ const int messageIndex[] = {
   80,3,
   83,3,
   86,5,
-
 }
 
-int numSequences = sizeof(sequences) / sizeof(sequences[0]);
+int numMessages = sizeof(messageIndex) / sizeof(messageIndex[0]) / 2;
 
 void setup() {
   // configure output pins
@@ -158,8 +158,9 @@ void runCountdown() {
 
   if (current_time_millis >= start_time_millis) {
     state = 3;
-    cooldown = millis() + 6000;
+    cooldown = millis() + 1000;
     delta = 0;
+    chooseMessage();
   }
 
   renderCountdown(delta);
@@ -176,21 +177,36 @@ void runStartup() {
     renderCountdown(default_time);
   }
 }
+// void runTheEnd() {
+
+//   unsigned long delta = cooldown - millis();
+
+//   if (millis() > cooldown) {
+//     state = 5; // here was 4 to render funky text
+//     cooldown = millis() + 10000;
+//   }
+//   if ((delta / 1000) % 2 == 0) {
+//     // renderCountdown(0);
+//     renderText();
+//   } else {
+//     delay(10);
+//   }
+// }
+
 void runTheEnd() {
-
-  unsigned long delta = cooldown - millis();
-
+  
   if (millis() > cooldown) {
-    state = 5; // here was 4 to render funky text
-    cooldown = millis() + 10000;
-  }
-  if ((delta / 1000) % 2 == 0) {
-    // renderCountdown(0);
-    renderText();
+    // advance to next message
+    if (!(++selectedMessageIndex[0] < numMessages)) {
+      state = 5;
+    } else {
+      cooldown = millis() + 1000;
+    }
   } else {
-    delay(10);
+    renderWord(messages[selectedMessageIndex[0]]);
   }
 }
+
 // void runFunkyText() {
 
 //   if (millis() + 3000 > cooldown) {
@@ -216,6 +232,11 @@ void runCountup() {
 //
 //                            HELPER
 //
+void chooseMessage() {
+  int index = random(0, numMessages) * 2;
+  selectedMessageIndex[0] = sequences[index][0];
+  selectedMessageIndex[1] = selectedMessageIndex[0] + sequences[index][1];
+}
 void checkReset() {
 
   int lightLevel = analogRead(A3);
@@ -300,7 +321,34 @@ void animationLightsOut() {
 //
 //                            DIGIT CONTROLLER
 //
+void renderWord(const char* word) {
+  for (int i = 0; i < 4; i++) {
+    renderLetter(word[i]);
+    switch (i) {
+      case 0:
+        digitalWrite(D1, HIGH);
+        delay(3);
+        digitalWrite(D1, LOW);
+        break;
+      case 1:
+        digitalWrite(D2, HIGH);
+        delay(3);
+        digitalWrite(D2, LOW);
+        break;
+      case 2:
+        digitalWrite(D3, HIGH);
+        delay(3);
+        digitalWrite(D3, LOW);
+        break;
+      case 3:
+        digitalWrite(D4, HIGH);
+        delay(3);
+        digitalWrite(D4, LOW);
+        break;
+    }
+  }
 
+}
 void renderCountdownMinutes(unsigned long delta) {
   unsigned long minutes = delta / 60000;
   unsigned long seconds = (delta % 60000) / 1000;
@@ -331,7 +379,6 @@ void renderCountdownMinutes(unsigned long delta) {
   delay(3);
   digitalWrite(D4, LOW);
 }
-
 void renderCountdown(unsigned long delta) { // renders ulong (in ms) as hektoseconds: 45690 => 45.69
 
   for (int i = 1; i < 5; i++) {
