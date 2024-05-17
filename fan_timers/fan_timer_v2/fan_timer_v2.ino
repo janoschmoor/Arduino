@@ -112,6 +112,8 @@ void setup() {
   pinMode(SG, OUTPUT);
   pinMode(SDP, OUTPUT);
 
+  randomSeed(analogRead(A0));
+
   // Serial.begin(9600);
 
 }
