@@ -39,7 +39,7 @@ const char* messages[] = {
   "free", "up  ", "soon",
   "nice", "dude",
   "haha", "did ", "it  ",
-  "hold", "nose", "now ",
+  "hold", "nose", "pal ",
   "not ", "done", "yet ",
   "go  ", "fast", "bro ",
   "nope", "not ", "yet ",
