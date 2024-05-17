@@ -584,6 +584,37 @@ void setDigit(int dig) { // digit encoding
 }
 void renderLetter(char c) {
   switch(c) {
+    case '0':
+      setDigit(0);
+      break;
+    case '1':
+      setDigit(1);
+      break;
+    case '2':
+      setDigit(2);
+      break;
+    case '3':
+      setDigit(3);
+      break;
+    case '4':
+      setDigit(4);
+      break;
+    case '5':
+      setDigit(5);
+      break;
+    case '6':
+      setDigit(6);
+      break;
+    case '7':
+      setDigit(7);
+      break;
+    case '8':
+      setDigit(8);
+      break;
+    case '9':
+      setDigit(9);
+      break;
+
     case 'a':
       digitalWrite(SA, LOW);
       digitalWrite(SB, LOW);
