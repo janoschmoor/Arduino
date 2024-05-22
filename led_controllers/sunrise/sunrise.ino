@@ -7,7 +7,7 @@ float brightness[NUM_LEDS];
 long last_time;
 const float fade = 0.2; // 0.1 fades absolute 10% per second
 
-int buttonState = 0;
+bool buttonIsPressed = false;
 
 class Dot {
   public:
@@ -83,24 +83,74 @@ Dot dots[] = {
 //      < RUN THE SKETCH >
 //
 
+int state;
+int nextstate;
+int cooldown;
+
 void setup() {
-  FastLED.addLeds<NEOPIXEL, 6>(leds, NUM_LEDS);
+  FastLED.addLeds<NEOPIXEL, 10>(leds, NUM_LEDS);
   last_time = millis();
 
   // button
   pinMode(2, INPUT);
   pinMode(13, OUTPUT);
+
+  // prep state
+  cooldown = millis() + 1000;
+  state = 0;
+  nextstate = 1;
+
+  randomSeed(analogRead(A0));
 }
 
 
 void loop() {
 
-  buttonState = digitalRead(2);
-  if (buttonState == HIGH) {
-    digitalWrite(13, HIGH);
-  } else {
-    digitalWrite(13, LOW);
+  int buttonState = digitalRead(9);
+  if (buttonState == HIGH && !buttonIsPressed) {
+    buttonIsPressed = true;
+  } else if (buttonState == LOW && buttonIsPressed) {
+    buttonIsPressed = false;
+    resetLED();
+    // temp
+    state = 0;
+    nextstate = 1;
+    cooldown = millis() + 1000;
   }
+
+  switch(state) {
+    case 0:
+      runTransition();
+      break;
+    case 1:
+      runDots();
+      break;
+  }
+
+  
+}
+
+void runTransition() {
+
+  long threshhold = 1000 - (cooldown - millis());
+
+  for (int i = 0; i < NUM_LEDS; i++) {
+    leds[i] = ((float)i * 1000 / NUM_LEDS < threshhold) ? CRGB::White : CRGB::Black;
+  }
+
+  FastLED.show();
+  delay(3);
+
+  // next state logic
+  if (threshhold >= 1000) {
+    state = nextstate;
+    nextstate = 0;
+    for (int i = 0; i < 3; i++) {
+      dots[i] = new Dot(random(NUM_LEDS - 4) + 2, random(1000) / 100.0 - 5.0, CHSV(random(255), 255, 255));
+    }
+  }
+}
+void runDots() {
 
   float delta = ((float) millis() - (float) last_time) / 1000;
   last_time = millis();
@@ -134,5 +184,13 @@ void loop() {
 
 
 
-
-
+//              HELPER
+void resetLED() {
+  for (int i = 0; i < NUM_LEDS; i++) {
+    leds[i] = CRGB::Black;
+    targets[i] = CRGB::Black;
+    brightness[i] = 0.0;
+  }
+  FastLED.show();
+  delay(3);
+}
