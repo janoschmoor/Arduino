@@ -143,7 +143,7 @@ void runTransition() {
   delay(3);
 
   // next state logic
-  if (threshhold >= 1000) {
+  if (cooldown < millis()) {
     state = nextstate;
     nextstate = 0;
     for (int i = 0; i < 3; i++) {
