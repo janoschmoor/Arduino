@@ -111,11 +111,12 @@ void loop() {
     buttonIsPressed = true;
   } else if (buttonState == LOW && buttonIsPressed) {
     buttonIsPressed = false;
-    resetLED();
     // temp
     state = 0;
     nextstate = 1;
     cooldown = millis() + 1000;
+    
+    resetLED();
   }
 
   switch(state) {
@@ -146,7 +147,7 @@ void runTransition() {
     state = nextstate;
     nextstate = 0;
     for (int i = 0; i < 3; i++) {
-      dots[i] = new Dot(random(NUM_LEDS - 4) + 2, random(1000) / 100.0 - 5.0, CHSV(random(255), 255, 255));
+      dots[i] = Dot(random(NUM_LEDS - 4) + 2, random(1000) / 50.0 - 10.0, CHSV(random(255), 255, 255));
     }
   }
 }
