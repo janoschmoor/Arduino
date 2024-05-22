@@ -85,7 +85,7 @@ Dot dots[] = {
 
 int state;
 int nextstate;
-int cooldown;
+long cooldown;
 
 void setup() {
   FastLED.addLeds<NEOPIXEL, 10>(leds, NUM_LEDS);
