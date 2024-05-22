@@ -5,7 +5,9 @@ CRGB targets[NUM_LEDS];
 float brightness[NUM_LEDS];
 
 long last_time;
-float fade = 0.2; // 0.1 fades absolute 10% per second
+const float fade = 0.2; // 0.1 fades absolute 10% per second
+
+int buttonState = 0;
 
 class Dot {
   public:
@@ -84,10 +86,21 @@ Dot dots[] = {
 void setup() {
   FastLED.addLeds<NEOPIXEL, 6>(leds, NUM_LEDS);
   last_time = millis();
+
+  // button
+  pinMode(2, INPUT);
+  pinMode(13, OUTPUT);
 }
 
 
 void loop() {
+
+  buttonState = digitalRead(2);
+  if (buttonState == HIGH) {
+    digitalWrite(13, HIGH);
+  } else {
+    digitalWrite(13, LOW);
+  }
 
   float delta = ((float) millis() - (float) last_time) / 1000;
   last_time = millis();
@@ -100,7 +113,7 @@ void loop() {
     for (int j = 0; j < sizeof(dots) / sizeof(dots[0]); j++) {
       if (i != j) {
         float distance = abs(dots[i].position - dots[j].position);
-        float blendAmt = pow(1.25, -distance) / 2.0; // adjust first float for steeper or shallower blending
+        float blendAmt = pow(1.1, -distance) / 2.0; // adjust first float for steeper or shallower blending
         target = blend(target, dots[j].color, blendAmt * 255);
       }
     }
