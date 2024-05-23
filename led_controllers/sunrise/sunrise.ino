@@ -76,7 +76,22 @@ Dot dots[] = {
 
 
 
+// CONTROL BUTTON
+const int buttonPin = 9;
+const int debounceDelay = 50;
 
+bool buttonState = LOW;
+bool lastButtonState = LOW;
+unsigned long lastDebounceTime = 0;
+
+enum ButtonState { IDLE, SINGLE_CLICK, DOUBLE_CLICK, LONG_PRESS };
+ButtonState currentState = IDLE;
+
+unsigned long buttonPressTime = 0;
+unsigned long clickTimeout = 300; // Time allowed between clicks for double-click
+unsigned long longPressThreshold = 1000; // Time threshold for a long press
+unsigned long lastClickTime = 0;
+int clickCount = 0;
 
 
  //
@@ -88,12 +103,12 @@ int nextstate;
 long cooldown;
 
 void setup() {
+  // led
   FastLED.addLeds<NEOPIXEL, 10>(leds, NUM_LEDS);
   last_time = millis();
 
   // button
-  pinMode(2, INPUT);
-  pinMode(13, OUTPUT);
+  pinMode(buttonPin, INPUT);
 
   // prep state
   cooldown = millis() + 1000;
@@ -106,18 +121,20 @@ void setup() {
 
 void loop() {
 
-  int buttonState = digitalRead(9);
-  if (buttonState == HIGH && !buttonIsPressed) {
-    buttonIsPressed = true;
-  } else if (buttonState == LOW && buttonIsPressed) {
-    buttonIsPressed = false;
-    // temp
-    state = 0;
-    nextstate = 1;
-    cooldown = millis() + 1000;
+  // int buttonState = digitalRead(9);
+  // if (buttonState == HIGH && !buttonIsPressed) {
+  //   buttonIsPressed = true;
+  // } else if (buttonState == LOW && buttonIsPressed) {
+  //   buttonIsPressed = false;
+  //   // temp
+  //   state = 0;
+  //   nextstate = 1;
+  //   cooldown = millis() + 1000;
     
-    resetLED();
-  }
+  //   resetLED();
+  // }
+
+  void checkButton();
 
   switch(state) {
     case 0:
@@ -194,4 +211,61 @@ void resetLED() {
   }
   FastLED.show();
   delay(3);
+}
+
+//              BUTTON
+void checkButton() {
+  int reading = digitalRead(buttonPin);
+  if (reading != lastButtonState) {
+    lastDebounceTime = millis();
+  }
+
+  if ((millis() - lastDebounceTime) > debounceDelay) {
+    if (reading != buttonState) {
+      buttonState = reading;
+      if (buttonState == HIGH) {
+        buttonPressTime = millis();
+      } else {
+        unsigned long pressDuration = millis() - buttonPressTime;
+        if (pressDuration > longPressThreshold) {
+          currentState = LONG_PRESS;
+        } else {
+          clickCount++;
+          lastClickTime = millis();
+        }
+      }
+    }
+  }
+
+  lastButtonState = reading;
+
+  if ((millis() - lastClickTime) > clickTimeout) {
+    if (clickCount == 1) {
+      currentState = SINGLE_CLICK;
+    } else if (clickCount == 2) {
+      currentState = DOUBLE_CLICK;
+    }
+    clickCount = 0;
+  }
+
+  executeAction();
+}
+void executeAction() {
+  switch (currentState) {
+    case SINGLE_CLICK:
+      Serial.println("Single Click Detected");
+      // Add your action here
+      break;
+    case DOUBLE_CLICK:
+      Serial.println("Double Click Detected");
+      // Add your action here
+      break;
+    case LONG_PRESS:
+      Serial.println("Long Press Detected");
+      // Add your action here
+      break;
+    default:
+      break;
+  }
+  currentState = IDLE;
 }
