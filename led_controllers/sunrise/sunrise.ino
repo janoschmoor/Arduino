@@ -255,6 +255,10 @@ void executeAction() {
     case SINGLE_CLICK:
       Serial.println("Single Click Detected");
       // Add your action here
+        state = 0;
+        nextstate = 1;
+        cooldown = millis() + 1000;
+        resetLED();
       break;
     case DOUBLE_CLICK:
       Serial.println("Double Click Detected");
