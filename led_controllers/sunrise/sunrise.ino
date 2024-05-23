@@ -78,7 +78,7 @@ Dot dots[] = {
 
 // CONTROL BUTTON
 const int buttonPin = 9;
-const int debounceDelay = 50;
+const int debounceDelay = 30;
 
 bool buttonState = LOW;
 bool lastButtonState = LOW;
@@ -88,8 +88,8 @@ enum ButtonState { IDLE, SINGLE_CLICK, DOUBLE_CLICK, LONG_PRESS };
 ButtonState currentState = IDLE;
 
 unsigned long buttonPressTime = 0;
-unsigned long clickTimeout = 300; // Time allowed between clicks for double-click
-unsigned long longPressThreshold = 1000; // Time threshold for a long press
+unsigned long clickTimeout = 240; // Time allowed between clicks for double-click
+unsigned long longPressThreshold = 600; // Time threshold for a long press
 unsigned long lastClickTime = 0;
 int clickCount = 0;
 
@@ -97,6 +97,9 @@ int clickCount = 0;
  //
 //      < RUN THE SKETCH >
 //
+
+enum GlState { IDLE, TRANSITION, WHITE, DOTS, COLOR };
+GlState currentGlState = IDLE;
 
 int state;
 int nextstate;
@@ -115,26 +118,15 @@ void setup() {
   state = 0;
   nextstate = 1;
 
+  // Serial.begin(9600);
+
   randomSeed(analogRead(A0));
 }
 
 
 void loop() {
 
-  // int buttonState = digitalRead(9);
-  // if (buttonState == HIGH && !buttonIsPressed) {
-  //   buttonIsPressed = true;
-  // } else if (buttonState == LOW && buttonIsPressed) {
-  //   buttonIsPressed = false;
-  //   // temp
-  //   state = 0;
-  //   nextstate = 1;
-  //   cooldown = millis() + 1000;
-    
-  //   resetLED();
-  // }
-
-  void checkButton();
+  checkButton();
 
   switch(state) {
     case 0:
@@ -215,6 +207,7 @@ void resetLED() {
 
 //              BUTTON
 void checkButton() {
+  //Serial.println(10);
   int reading = digitalRead(buttonPin);
   if (reading != lastButtonState) {
     lastDebounceTime = millis();
