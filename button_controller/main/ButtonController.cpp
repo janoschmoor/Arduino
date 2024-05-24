@@ -1,8 +1,8 @@
 #include "ButtonController.h"
 
 // Constructor
-ButtonController::ButtonController(int pin) {
-    this.pin = pin;
+ButtonController::ButtonController(int buttonPin) {
+    pin = buttonPin;
 }
 
 void ButtonController::setup() {

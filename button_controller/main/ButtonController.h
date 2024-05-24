@@ -14,13 +14,13 @@ class ButtonController {
 public:
     // Constructor(s) and destructor
     ButtonController(int pin);
-    ~ButtonController();
 
     // Declaration of member functions
+    void setup();
     ButtonState update();
 
 private:
-    const int pin;
+    int pin;
     const int debounceDelay = 30;
 
     bool buttonState = LOW;

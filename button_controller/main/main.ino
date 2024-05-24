@@ -13,7 +13,7 @@ void loop() {
     ButtonState state = button.update();
     switch (state) {
         case IDLE:
-            Serial.println("IDLE");
+            // Serial.println("IDLE");
             break;
         case SINGLE_CLICK:
             Serial.println("SINGLE_CLICK");
