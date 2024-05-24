@@ -117,7 +117,7 @@ void setup() {
   cooldown = millis() + 1000;
   state = 0;
   nextstate = 1;
-
+  
   // Serial.begin(9600);
 
   randomSeed(analogRead(A0));
