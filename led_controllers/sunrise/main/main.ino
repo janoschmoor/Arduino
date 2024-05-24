@@ -1,4 +1,5 @@
 #include <FastLED.h>
+
 #define NUM_LEDS 60 // 60
 CRGB leds[NUM_LEDS];
 CRGB targets[NUM_LEDS];
@@ -7,7 +8,9 @@ float brightness[NUM_LEDS];
 long last_time;
 const float fade = 0.2; // 0.1 fades absolute 10% per second
 
-bool buttonIsPressed = false;
+#include "ButtonController.h"
+const int BUTTON_PIN = 9;
+ButtonController button(BUTTON_PIN);
 
 class Dot {
   public:
@@ -75,31 +78,12 @@ Dot dots[] = {
 
 
 
-
-// CONTROL BUTTON
-const int buttonPin = 9;
-const int debounceDelay = 30;
-
-bool buttonState = LOW;
-bool lastButtonState = LOW;
-unsigned long lastDebounceTime = 0;
-
-enum ButtonState { IDLE, SINGLE_CLICK, DOUBLE_CLICK, LONG_PRESS };
-ButtonState currentState = IDLE;
-
-unsigned long buttonPressTime = 0;
-unsigned long clickTimeout = 240; // Time allowed between clicks for double-click
-unsigned long longPressThreshold = 600; // Time threshold for a long press
-unsigned long lastClickTime = 0;
-int clickCount = 0;
-
-
- //
+//
 //      < RUN THE SKETCH >
 //
 
-enum GlState { IDLE, TRANSITION, WHITE, DOTS, COLOR };
-GlState currentGlState = IDLE;
+// enum GlState { IDLE, TRANSITION, WHITE, DOTS, COLOR };
+// GlState currentGlState = IDLE;
 
 int state;
 int nextstate;
@@ -111,13 +95,13 @@ void setup() {
   last_time = millis();
 
   // button
-  pinMode(buttonPin, INPUT);
+  button.setup();
 
   // prep state
   cooldown = millis() + 1000;
   state = 0;
   nextstate = 1;
-  
+
   // Serial.begin(9600);
 
   randomSeed(analogRead(A0));
@@ -125,9 +109,6 @@ void setup() {
 
 
 void loop() {
-
-  checkButton();
-
   switch(state) {
     case 0:
       runTransition();
@@ -136,6 +117,27 @@ void loop() {
       runDots();
       break;
   }
+
+  ButtonState state = button.update();
+  switch (state) {
+    case IDLE:
+      // Serial.println("IDLE");
+      break;
+    case SINGLE_CLICK:
+      Serial.println("SINGLE_CLICK");
+      state = 0;
+      nextstate = 1;
+      cooldown = millis() + 1000;
+      resetLED();
+      break;
+    case DOUBLE_CLICK:
+      Serial.println("DOUBLE_CLICK");
+      break;
+    case LONG_PRESS:
+      Serial.println("LONG_PRESS");
+      break;
+  }
+
 
   
 }
@@ -203,66 +205,4 @@ void resetLED() {
   }
   FastLED.show();
   delay(3);
-}
-
-//              BUTTON
-void checkButton() {
-  //Serial.println(10);
-  int reading = digitalRead(buttonPin);
-  if (reading != lastButtonState) {
-    lastDebounceTime = millis();
-  }
-
-  if ((millis() - lastDebounceTime) > debounceDelay) {
-    if (reading != buttonState) {
-      buttonState = reading;
-      if (buttonState == HIGH) {
-        buttonPressTime = millis();
-      } else {
-        unsigned long pressDuration = millis() - buttonPressTime;
-        if (pressDuration > longPressThreshold) {
-          currentState = LONG_PRESS;
-        } else {
-          clickCount++;
-          lastClickTime = millis();
-        }
-      }
-    }
-  }
-
-  lastButtonState = reading;
-
-  if ((millis() - lastClickTime) > clickTimeout) {
-    if (clickCount == 1) {
-      currentState = SINGLE_CLICK;
-    } else if (clickCount == 2) {
-      currentState = DOUBLE_CLICK;
-    }
-    clickCount = 0;
-  }
-
-  executeAction();
-}
-void executeAction() {
-  switch (currentState) {
-    case SINGLE_CLICK:
-      Serial.println("Single Click Detected");
-      // Add your action here
-        state = 0;
-        nextstate = 1;
-        cooldown = millis() + 1000;
-        resetLED();
-      break;
-    case DOUBLE_CLICK:
-      Serial.println("Double Click Detected");
-      // Add your action here
-      break;
-    case LONG_PRESS:
-      Serial.println("Long Press Detected");
-      // Add your action here
-      break;
-    default:
-      break;
-  }
-  currentState = IDLE;
 }
