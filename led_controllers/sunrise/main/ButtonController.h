@@ -3,16 +3,24 @@
 
 #include <Arduino.h>
 
+enum ButtonState {
+    IDLE,
+    SINGLE_CLICK,
+    DOUBLE_CLICK,
+    LONG_PRESS
+};
+
 class ButtonController {
 public:
     // Constructor(s) and destructor
-    ButtonController();
+    ButtonController(int pin);
     ~ButtonController();
 
-    // Declare your member functions here
+    // Declaration of member functions
+    ButtonState update();
 
 private:
-    // Declare any private member variables here
+    int pin;
 
 };
 
