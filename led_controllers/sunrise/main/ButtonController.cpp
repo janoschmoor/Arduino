@@ -9,7 +9,7 @@ void ButtonController::setup() {
     pinMode(pin, INPUT);
 }
 
-ButtonState ButtonController::update() {
+ButtonState ButtonController::main() {
 
     currentState = IDLE;
 

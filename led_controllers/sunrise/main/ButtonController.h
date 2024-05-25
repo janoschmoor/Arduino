@@ -17,7 +17,7 @@ public:
 
     // Declaration of member functions
     void setup();
-    ButtonState update();
+    ButtonState main();
 
 private:
     int pin;
