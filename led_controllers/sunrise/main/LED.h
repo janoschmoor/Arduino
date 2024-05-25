@@ -10,15 +10,17 @@ public:
 
     // Declaration of member functions
     void setup();
-    void update();
+
+    void runTransition(int cooldown, int cooldownTime);
+    void runLight();
 
 private:
     int pin;
     int numLeds;
 
-    CRGB leds[NUM_LEDS];
-    CRGB targets[NUM_LEDS];
-    float brightness[NUM_LEDS];
+    CRGB* leds;
+    CRGB* targets;
+    float* brightness;
 
     long last_time;
     const float fade = 0.2; // 0.1 fades absolute 10% per second

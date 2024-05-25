@@ -26,7 +26,7 @@ private:
     BedState nextState;
 
     int cooldown;
-    int cooldownTime = 1000;
+    const int cooldownTime = 1000;
 
 
 };
