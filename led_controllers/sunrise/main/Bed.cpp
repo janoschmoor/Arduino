@@ -12,10 +12,11 @@ ButtonController button(BUTTON_PIN);
 // Constructor
 Bed::Bed() {}
 
+// Public member functions
 void Bed::setup() {
     button.setup();
 
-    state = STARTUP;
+    resetState();
 }
 
 void Bed::main() {
@@ -33,17 +34,17 @@ void Bed::main() {
     }
 }
 
-void Bed::handleStateTransition(ButtonState buttonState) {
-    switch (buttonState) {
-        case STARTUP:
-            if (buttonState == PRESSED) {
-                state = LIGHT;
-            }
-            break;
-        case LIGHT:
-            if (buttonState == PRESSED) {
-                state = STARTUP;
-            }
-            break;
-    }
+// Private member functions
+void Bed::handleInput(ButtonState buttonState) {
+    // switch (buttonState) {
+    //     case SINGLE_CLICK:
+            
+    //         break;
+        
+    // }
+}
+void Bed::resetState() {
+    currentState = TRANSITION;
+    nextState = TRANSITION;
+    cooldown = millis() + cooldownTime;
 }

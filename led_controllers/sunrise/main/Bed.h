@@ -14,13 +14,19 @@ public:
 private:
 
     void handleInput(ButtonState);
+    void resetState();
 
     enum BedState {
-        STARTUP,
+        TRANSITION,
         LIGHT,
     };
 
-    BedState state;
+    BedState currentState;
+    BedState nextState;
+
+    int cooldown;
+    int cooldownTime = 1000;
+
 
 };
 
