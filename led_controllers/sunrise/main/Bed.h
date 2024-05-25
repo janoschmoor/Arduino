@@ -13,22 +13,20 @@ public:
 
 private:
 
-    void handleInput(ButtonState);
-    void resetState();
-    void endTransition();
-
     enum BedState {
         TRANSITION,
         LIGHT,
     };
+    
+    void handleInput(ButtonState);
+    void resetState();
+    void endTransition();
 
     BedState currentState;
     BedState nextState;
 
     int cooldown;
     const int cooldownTime = 1000;
-
-
 };
 
 #endif

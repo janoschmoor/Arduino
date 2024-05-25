@@ -26,7 +26,14 @@ void LED::runTransition(int cooldown, int cooldownTime) {
     }
 
     FastLED.show();
-    delay(3);
+}
+
+void LED::runLight() {
+    for (int i = 0; i < numLeds; i++) {
+        leds[i] = CRGB::White;
+    }
+
+    FastLED.show();
 }
 
 
