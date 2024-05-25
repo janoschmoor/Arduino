@@ -15,6 +15,7 @@ Bed::Bed() {}
 // Public member functions
 void Bed::setup() {
     button.setup();
+    led.setup();
 
     resetState();
 }
@@ -22,29 +23,38 @@ void Bed::setup() {
 void Bed::main() {
 
     ButtonState buttonState = button.main();
+    handleInput(buttonState);
     
-
-    switch () {
-        case STARTUP:
-
+    switch (currentState) {
+        case TRANSITION:
+            led.runTransition(cooldown, cooldownTime);
+            if (millis() > cooldown) {
+                endTransition();
+            }
             break;
         case LIGHT:
-            
+            led.runLight();
             break;
     }
 }
 
+
 // Private member functions
 void Bed::handleInput(ButtonState buttonState) {
-    // switch (buttonState) {
-    //     case SINGLE_CLICK:
-            
-    //         break;
+    switch (buttonState) {
+        case LONG_PRESS:
+            resetState();
+            break;
         
-    // }
+    }
 }
+
 void Bed::resetState() {
     currentState = TRANSITION;
-    nextState = TRANSITION;
+    nextState = LIGHT;
     cooldown = millis() + cooldownTime;
+}
+
+void Bed::endTransition() {
+    currentState = nextState;
 }

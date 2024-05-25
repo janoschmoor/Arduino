@@ -15,6 +15,7 @@ private:
 
     void handleInput(ButtonState);
     void resetState();
+    void endTransition();
 
     enum BedState {
         TRANSITION,
