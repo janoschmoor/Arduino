@@ -1,35 +1,26 @@
 #include "LED.h"
-#include "FastLED.h"
+// #include <FastLED.h>
+// #include "Bed.h"
 
 // Constructor
-LED::LED(int buttonPin, int numLeds) {
-    pin = buttonPin;
-    this.numLeds = numLeds;
-    leds = new CRGB[numLeds];
-    targets = new CRGB[numLeds];
-    brightness = new float[numLeds];
-}
+LED::LED() {}
 
 // Public member functions
 void LED::setup() {
-    FastLED.addLeds<NEOPIXEL, pin>(leds, numLeds);
-    pinMode(pin, OUTPUT);
+    FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_LEDS);
 }
 
 void LED::runTransition(int cooldown, int cooldownTime) {
-
     int progress = cooldown - millis();
-
-    for (int i = 0; i < numLeds; i++) {
+    for (int i = 0; i < NUM_LEDS; i++) {
         float progress = ((float) cooldown - millis()) / cooldownTime;
         leds[i] = leds[i].lerp8(targets[i], progress);
     }
-
     FastLED.show();
 }
 
 void LED::runLight() {
-    for (int i = 0; i < numLeds; i++) {
+    for (int i = 0; i < NUM_LEDS; i++) {
         leds[i] = CRGB::White;
     }
 

@@ -1,10 +1,10 @@
 #include "Bed.h"
-Bed bed();
+Bed bed;
 
-void setup {
+void setup() {
     bed.setup();
 }
 
-void loop {
+void loop() {
     bed.main();
 }
