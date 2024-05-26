@@ -16,12 +16,17 @@ public:
 private:
 
     enum BedState {
-        TRANSITION,
-        LIGHT,
+        SLEEP,
+        LIGHT, // must always be first
+
+
+
+        TRANSITION, // special state must always be last
     };
     
     void handleInput(ButtonState);
-    void resetState();
+    void setState(BedState);
+    void advanceState();
     void endTransition();
 
     // LED led;

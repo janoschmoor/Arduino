@@ -3,7 +3,6 @@
 #include "LED.h"
 LED led;
 
-
 #include "ButtonController.h"
 const int BUTTON_PIN = 9;
 ButtonController button(BUTTON_PIN);
@@ -17,7 +16,7 @@ void Bed::setup() {
     led.setup();
     button.setup();
 
-    resetState();
+    setState(LIGHT);
 }
 
 void Bed::main() {
@@ -43,16 +42,31 @@ void Bed::main() {
 void Bed::handleInput(ButtonState buttonState) {
     switch (buttonState) {
         case LONG_PRESS:
-            resetState();
+            if (currentState == LIGHT) {
+                setState(SLEEP);
+            } else {
+                setState(LIGHT);
+            }
+            break;
+        case SINGLE_CLICK:
+            advanceState();
             break;
         
     }
 }
 
-void Bed::resetState() {
+void Bed::setState(BedState state) {
     currentState = TRANSITION;
-    nextState = LIGHT;
+    nextState = state;
     cooldown = millis() + cooldownTime;
+}
+
+void Bed::advanceState() {
+    int next = static_cast<int>(currentState) + 1;
+    if (next >= static_cast<int>(TRANSITION)) {
+        next = static_cast<int>(LIGHT);
+    }
+    setState(static_cast<BedState>(next));
 }
 
 void Bed::endTransition() {
