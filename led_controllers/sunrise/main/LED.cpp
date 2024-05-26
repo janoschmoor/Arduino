@@ -21,7 +21,7 @@ void LED::setup() {
     last_time = millis();
 
     for (int i = 0; i < sizeof(dots) / sizeof(dots[0]); i++) {
-        dots[i].setup(random(2, NUM_LEDS-2), random(-5, 5), CHSV(random(0, 255), 255, 255), leds, targets, brightness);
+        dots[i].setup(random(2, NUM_LEDS-2), (float) random(-50, 50) / 10.0, CHSV(random(0, 255), 255, 255), leds, targets, brightness);
     }
 }
 

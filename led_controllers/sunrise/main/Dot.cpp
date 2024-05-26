@@ -1,9 +1,7 @@
 #include "Dot.h"
 
 // Constructor
-Dot::Dot() {
-
-}
+Dot::Dot() {}
 
 // Public member functions
 void Dot::setup(float startPos, float startVel, CRGB startColor, CRGB* leds, CRGB* targets, float* brightness) {

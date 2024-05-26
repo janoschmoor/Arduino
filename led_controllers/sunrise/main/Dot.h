@@ -22,9 +22,9 @@ private:
     // Private member functions
     float easing(float x);
 
-    float* brightness;
-    CRGB* targets;
     CRGB* leds;
+    CRGB* targets;
+    float* brightness;
 
 };
 
