@@ -17,6 +17,7 @@ public:
 
     void runTransition(int cooldown, int cooldownTime);
     void runLight();
+    void runSleep();
 
 private:
 

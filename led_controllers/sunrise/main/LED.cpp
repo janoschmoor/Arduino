@@ -23,7 +23,13 @@ void LED::runLight() {
     for (int i = 0; i < NUM_LEDS; i++) {
         leds[i] = CRGB::White;
     }
+    FastLED.show();
+}
 
+void LED::runSleep() {
+    for (int i = 0; i < NUM_LEDS; i++) {
+        leds[i] = CRGB::Black;
+    }
     FastLED.show();
 }
 

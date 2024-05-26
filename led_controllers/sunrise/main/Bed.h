@@ -19,7 +19,7 @@ private:
         SLEEP,
         LIGHT, // must always be first
 
-
+        // RANDOM_DOTS,
 
         TRANSITION, // special state must always be last
     };

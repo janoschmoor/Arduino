@@ -34,6 +34,9 @@ void Bed::main() {
         case LIGHT:
             led.runLight();
             break;
+        case SLEEP:
+            led.runSleep();
+            break;
     }
 }
 
