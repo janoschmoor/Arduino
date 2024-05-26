@@ -2,6 +2,7 @@
 Bed bed;
 
 void setup() {
+    randomSeed(analogRead(A0));
     bed.setup();
 }
 

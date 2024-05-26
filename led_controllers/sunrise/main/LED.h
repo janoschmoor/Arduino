@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <FastLED.h>
+#include "Dot.h"
 
 const int NUM_LEDS = 60;
 const int LED_PIN = 10;
@@ -18,6 +19,7 @@ public:
     void runTransition(int cooldown, int cooldownTime);
     void runLight();
     void runSleep();
+    void runRandomDots();
 
 private:
 
@@ -25,8 +27,8 @@ private:
     CRGB targets[NUM_LEDS];
     float brightness[NUM_LEDS];
 
-    // long last_time;
-    // const float fade = 0.2; // 0.1 fades absolute 10% per second
+    long last_time;
+    const float fade = 0.2; // 0.1 fades absolute 10% per second
 };
 
 #endif

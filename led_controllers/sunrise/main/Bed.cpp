@@ -37,6 +37,10 @@ void Bed::main() {
         case SLEEP:
             led.runSleep();
             break;
+
+        case RANDOM_DOTS:
+            led.runRandomDots();
+            break;
     }
 }
 
