@@ -32,8 +32,8 @@ private:
     // LED led;
     BedState currentState;
     BedState nextState;
-    int cooldown;
-    const int cooldownTime = 1000;
+    long cooldown;
+    const int cooldownTime = 400;
 };
 
 #endif

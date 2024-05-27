@@ -15,8 +15,9 @@ public:
 
     // Declaration of member functions
     void setup();
+    void randomize();
 
-    void runTransition(int cooldown, int cooldownTime);
+    void runTransition(long cooldown, int cooldownTime);
     void runLight();
     void runSleep();
     void runRandomDots();

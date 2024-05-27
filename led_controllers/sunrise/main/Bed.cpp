@@ -58,7 +58,6 @@ void Bed::handleInput(ButtonState buttonState) {
         case SINGLE_CLICK:
             advanceState();
             break;
-        
     }
 }
 
@@ -69,13 +68,19 @@ void Bed::setState(BedState state) {
 }
 
 void Bed::advanceState() {
+    Serial.print(currentState);
+    Serial.print(" -> ");
     int next = static_cast<int>(currentState) + 1;
     if (next >= static_cast<int>(TRANSITION)) {
         next = static_cast<int>(LIGHT);
     }
     setState(static_cast<BedState>(next));
+    Serial.println(nextState);
 }
 
 void Bed::endTransition() {
     currentState = nextState;
+    if (currentState == RANDOM_DOTS) {
+      led.randomize();
+    }
 }
