@@ -17,21 +17,38 @@ LED::LED() {}
 
 // Public member functions
 void LED::setup() {
-    FastLED.addLeds<NEOPIXEL, LED_PIN>(leds, NUM_LEDS);
+    FastLED.addLeds<WS2812, LED_PIN>(leds, NUM_LEDS);
     last_time = millis();
+    randomize();
+}
 
+void LED::randomize() {
     for (int i = 0; i < sizeof(dots) / sizeof(dots[0]); i++) {
-        dots[i].setup(random(2, NUM_LEDS-2), (float) random(-50, 50) / 10.0, CHSV(random(0, 255), 255, 255), leds, targets, brightness);
+        float speed = (float)random(50, 100) / 10.0;
+        if (random(0,2) == 0) {
+          speed *= -1;
+        }
+        dots[i].setup(random(2, NUM_LEDS-2), speed, CHSV(random(0, 255), 255, 255), leds, targets, brightness);
+    }
+    for (int i = 0; i < NUM_LEDS; i++) {
+        targets[i] = CRGB::Black;
+        brightness[i] = 0.0;
     }
 }
 
-void LED::runTransition(int cooldown, int cooldownTime) {
-    int progress = cooldown - millis();
+void LED::runTransition(long cooldown, int cooldownTime) {
+    int ratio = 1.0;
+    float progress = ((float) cooldown - millis()) / (cooldownTime * ratio);
     for (int i = 0; i < NUM_LEDS; i++) {
-        float progress = ((float) cooldown - millis()) / cooldownTime;
-        leds[i] = leds[i].lerp8(targets[i], progress);
+        float position = abs(i - (float) NUM_LEDS / 2.0);
+        if ((float) position / (NUM_LEDS / 2.0) > progress) {
+          leds[i] = CRGB::White;
+        } else {
+          leds[i] = CRGB::Black;
+        }
     }
     FastLED.show();
+    delay(3);
 }
 
 void LED::runLight() {
@@ -39,6 +56,7 @@ void LED::runLight() {
         leds[i] = CRGB::White;
     }
     FastLED.show();
+    delay(3);
 }
 
 void LED::runSleep() {
@@ -46,6 +64,7 @@ void LED::runSleep() {
         leds[i] = CRGB::Black;
     }
     FastLED.show();
+    delay(3);
 }
 
 void LED::runRandomDots() {
@@ -74,6 +93,7 @@ void LED::runRandomDots() {
     }
 
     FastLED.show();
+    delay(3);
 }
 
 
