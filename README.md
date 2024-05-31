@@ -1,3 +1,5 @@
 # Arduino Projects
 
-just tinkerings for now
+just tinkering for now
+
+arduino uno, arduino nano and esp32
